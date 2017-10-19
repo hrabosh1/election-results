@@ -22,14 +22,6 @@ function firstRun() {
 
 function updateData() {
 
-    # import celkových výsledků
-    rm "$CRSoubor"
-    wget "$CRUrl"
-
-    iconv -f CP1250 -t utf8 "$CRSoubor" | tail -n +2 > CRInput.xml
-
-    $conn -e "call ParseXml('$(cat CRInput.xml)')"
-    
     
     # import preferenčních hlasů
 
@@ -54,8 +46,17 @@ function updateData() {
     
     done < HlasyInput.xml
     
+    # import celkových výsledků
+    rm "$CRSoubor"
+    wget "$CRUrl"
+
+    iconv -f CP1250 -t utf8 "$CRSoubor" | tail -n +2 > CRInput.xml
+
+    $conn -e "call ParseXml('$(cat CRInput.xml)')"
+    
+    
     # seřazení kandidátů a označení kandidátů s mandátem
-    $conn -e "call SeradKandidatyPodlePreferenci();  call OznacZvoleneKandidaty(); call  SpocitejStranyPrehled()"; # přepočet preferencí by měl být před výběrem zvolených poslanců
+    $conn -e "call SpocitejStranyPrehled(); call SeradKandidatyPodlePreferenci(); call OznacZvoleneKandidaty(); call CRPrehledUpdate()"; # přepočet preferencí by měl být před výběrem zvolených poslanců
 }
 
 
