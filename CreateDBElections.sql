@@ -6499,19 +6499,19 @@ CREATE TABLE `Kraje` (
 
 INSERT INTO `Kraje` (`Kraj_ID`, `Nazev`, `Mandaty`, `HlasuNaMandat`) VALUES
 (1,	'Praha',	0,	0),
-(2,	'StČ',	0,	0),
-(3,	'JČ',	0,	0),
-(4,	'Plz',	0,	0),
-(5,	'KV',	0,	0),
-(6,	'UL',	0,	0),
-(7,	'Lbc',	0,	0),
-(8,	'HrKr',	0,	0),
-(9,	'Par',	0,	0),
-(10,	'Vys',	0,	0),
-(11,	'JMK',	0,	0),
-(12,	'Olm',	0,	0),
-(13,	'Zln',	0,	0),
-(14,	'MSK',	0,	0);
+(2,	'StČ  ',	0,	0),
+(3,	'JČ   ',	0,	0),
+(4,	'Plz  ',	0,	0),
+(5,	'KV   ',	0,	0),
+(6,	'UL   ',	0,	0),
+(7,	'Lbc  ',	0,	0),
+(8,	'HrKr ',	0,	0),
+(9,	'Par  ',	0,	0),
+(10,'Vys  ',	0,	0),
+(11,'JMK  ',	0,	0),
+(12,'Olm  ',	0,	0),
+(13,'Zln  ',	0,	0),
+(14,'MSK  ',	0,	0);
 
 DROP TABLE IF EXISTS `Strany`;
 CREATE TABLE `Strany` (
