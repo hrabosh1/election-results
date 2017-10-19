@@ -6523,7 +6523,7 @@ CREATE TABLE `v_StranyPrehledPodily` (`-` varchar(1), `Strana` varchar(15), `Man
 
 
 DROP TABLE IF EXISTS `v_PiratiMandaty`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_PiratiMandaty` AS select concat(`KR`.`Nazev`,' - ',`K`.`Poradi`) AS `Kraj`,`K`.`Jmeno` AS `Jméno` from (`Kandidati` `K` join `Kraje` `KR` on((`K`.`Kraj_ID` = `KR`.`Kraj_ID`))) where ((`K`.`MaMandat` = 1) and (`K`.`Strana_ID` = 11)) order by `K`.`Kraj_ID`,`K`.`Poradi`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_PiratiMandaty` AS select concat(`KR`.`Nazev`,' - ',`K`.`Poradi`) AS `Kraj`,`K`.`Jmeno` AS `Jméno` from (`Kandidati` `K` join `Kraje` `KR` on((`K`.`Kraj_ID` = `KR`.`Kraj_ID`))) where ((`K`.`MaMandat` = 1) and (`K`.`Strana_ID` = 15)) order by `K`.`Kraj_ID`,`K`.`Poradi`;
 
 DROP TABLE IF EXISTS `v_StranyPrehledMandaty`;
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_StranyPrehledMandaty` AS select ' ' AS `-`,`Strany`.`Nazev` AS `Strana`,concat(if((`Strany`.`Mandaty` < 10),' ',''),`Strany`.`Mandaty`,' (',if((`Strany`.`CRPodil` < 10),' ',''),`Strany`.`CRPodil`,'%)') AS `Mandáty`,`Strany`.`Kraj1` AS `Praha`,`Strany`.`Kraj2` AS `StČ`,`Strany`.`Kraj3` AS `JČ`,`Strany`.`Kraj4` AS `Plz`,`Strany`.`Kraj5` AS `KV`,`Strany`.`Kraj6` AS `UL`,`Strany`.`Kraj7` AS `Lbc`,`Strany`.`Kraj8` AS `HrKr`,`Strany`.`Kraj9` AS `Par`,`Strany`.`Kraj10` AS `Vys`,`Strany`.`Kraj11` AS `JMK`,`Strany`.`Kraj12` AS `Olm`,`Strany`.`Kraj13` AS `Zln`,`Strany`.`Kraj14` AS `MSK` from `Strany` where (`Strany`.`CRPodil` > 1) order by `Strany`.`Mandaty` desc,`Strany`.`CRPodil` desc,`Strany`.`Nazev`;
