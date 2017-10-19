@@ -6597,9 +6597,12 @@ CREATE TABLE `StranyKraje` (
   CONSTRAINT `StranyKraje_ibfk_2` FOREIGN KEY (`Kraj_ID`) REFERENCES `Kraje` (`Kraj_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-
 DROP VIEW IF EXISTS `v_PiratiMandaty`;
-CREATE TABLE `v_PiratiMandaty` (`Kraj` varchar(56), `Jméno` varchar(100), `Preference` varchar(8));
+CREATE TABLE `v_PiratiMandaty` (`Kraj` varchar(56), `Jméno` varchar(100), `Preference` varchar(9));
+
+
+DROP TABLE IF EXISTS `v_PiratiMandaty`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_PiratiMandaty` AS select concat(`KR`.`Nazev`,' - ',`K`.`PoradiPreference`) AS `Kraj`,`K`.`Jmeno` AS `Jméno`,concat(if((`K`.`Preference` < 10),' ',''),`K`.`Preference`,' %') AS `Preference` from (`Kandidati` `K` join `Kraje` `KR` on((`K`.`Kraj_ID` = `KR`.`Kraj_ID`))) where ((`K`.`MaMandat` = 1) and (`K`.`Strana_ID` = 15)) order by `K`.`Kraj_ID`,`K`.`PoradiPreference`;
 
 
 DROP VIEW IF EXISTS `v_StranyPrehledMandaty`;
@@ -6610,9 +6613,7 @@ DROP VIEW IF EXISTS `v_StranyPrehledPodily`;
 CREATE TABLE `v_StranyPrehledPodily` (`-` varchar(1), `Strana` varchar(27), `Mandáty` varchar(15), `Praha` varchar(9), `StČ` varchar(9), `JČ` varchar(9), `Plz` varchar(9), `KV` varchar(9), `UL` varchar(9), `Lbc` varchar(9), `HrKr` varchar(9), `Par` varchar(9), `Vys` varchar(9), `JMK` varchar(9), `Olm` varchar(9), `Zln` varchar(9), `MSK` varchar(9));
 
 
-DROP TABLE IF EXISTS `v_PiratiMandaty`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_PiratiMandaty` AS select concat(`KR`.`Nazev`,' - ',`K`.`PoradiPreference`) AS `Kraj`,`K`.`Jmeno` AS `Jméno`,concat(`K`.`Preference`,' %') AS `Preference` from (`Kandidati` `K` join `Kraje` `KR` on((`K`.`Kraj_ID` = `KR`.`Kraj_ID`))) where ((`K`.`MaMandat` = 1) and (`K`.`Strana_ID` = 15)) order by `K`.`Kraj_ID`,`K`.`PoradiPreference`;
-
+select concat(`KR`.`Nazev`,' - ',`K`.`PoradiPreference`) AS `Kraj`,`K`.`Jmeno` AS `Jméno`,concat(if((`K`.`Preference` < 10),' ',''),`K`.`Preference`,' %') AS `Preference` from (`Kandidati` `K` join `Kraje` `KR` on((`K`.`Kraj_ID` = `KR`.`Kraj_ID`))) where ((`K`.`MaMandat` = 1) and (`K`.`Strana_ID` = 15)) order by `K`.`Kraj_ID`,`K`.`PoradiPreference`
 DROP TABLE IF EXISTS `v_StranyPrehledMandaty`;
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_StranyPrehledMandaty` AS select `A`.`-` AS `-`,`A`.`Strana` AS `Strana`,`A`.`Mandáty` AS `Mandáty`,`A`.`Praha` AS `Praha`,`A`.`StČ` AS `StČ`,`A`.`JČ` AS `JČ`,`A`.`Plz` AS `Plz`,`A`.`KV` AS `KV`,`A`.`UL` AS `UL`,`A`.`Lbc` AS `Lbc`,`A`.`HrKr` AS `HrKr`,`A`.`Par` AS `Par`,`A`.`Vys` AS `Vys`,`A`.`JMK` AS `JMK`,`A`.`Olm` AS `Olm`,`A`.`Zln` AS `Zln`,`A`.`MSK` AS `MSK` from (select ' ' AS `-`,`S`.`Nazev` AS `Strana`,concat(if((`S`.`Mandaty` < 10),' ',''),`S`.`Mandaty`,' (',if((`S`.`CRPodil` < 10),' ',''),`S`.`CRPodil`,'%)') AS `Mandáty`,`S`.`Kraj1` AS `Praha`,`S`.`Kraj2` AS `StČ`,`S`.`Kraj3` AS `JČ`,`S`.`Kraj4` AS `Plz`,`S`.`Kraj5` AS `KV`,`S`.`Kraj6` AS `UL`,`S`.`Kraj7` AS `Lbc`,`S`.`Kraj8` AS `HrKr`,`S`.`Kraj9` AS `Par`,`S`.`Kraj10` AS `Vys`,`S`.`Kraj11` AS `JMK`,`S`.`Kraj12` AS `Olm`,`S`.`Kraj13` AS `Zln`,`S`.`Kraj14` AS `MSK` from `elections`.`Strany` `S` where (`S`.`CRPodil` > 1) order by `S`.`Mandaty` desc,`S`.`CRPodil` desc,`S`.`Nazev`) `A` union select '' AS `-`,'Sečteno hlasů (100% = 2013)' AS `Strana`,concat(`CRP`.`CR`,' %') AS `Mandáty`,concat(`CRP`.`Kraj_1`,' %') AS `Praha`,concat(`CRP`.`Kraj_2`,' %') AS `StČ`,concat(`CRP`.`Kraj_3`,' %') AS `JČ`,concat(`CRP`.`Kraj_4`,' %') AS `Plz`,concat(`CRP`.`Kraj_5`,' %') AS `KV`,concat(`CRP`.`Kraj_6`,' %') AS `UL`,concat(`CRP`.`Kraj_7`,' %') AS `Lbc`,concat(`CRP`.`Kraj_8`,' %') AS `HrKr`,concat(`CRP`.`Kraj_9`,' %') AS `Par`,concat(`CRP`.`Kraj_10`,' %') AS `Vys`,concat(`CRP`.`Kraj_11`,' %') AS `JMK`,concat(`CRP`.`Kraj_12`,' %') AS `Olm`,concat(`CRP`.`Kraj_13`,' %') AS `Zln`,concat(`CRP`.`Kraj_14`,' %') AS `MSK` from `elections`.`CRPrehled` `CRP` where (`CRP`.`Popis` = 'Podil');
 
