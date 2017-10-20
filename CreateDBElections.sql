@@ -6682,6 +6682,68 @@ ORDER BY
   CRPodilPoradi DESC;
 
 DROP TABLE IF EXISTS `v_StranyPrehledPodily`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_StranyPrehledPodily` AS select `A`.`-` AS `-`,`A`.`Strana` AS `Strana`,`A`.`Mandáty` AS `Mandáty`,`A`.`Praha` AS `Praha`,`A`.`StČ` AS `StČ`,`A`.`JČ` AS `JČ`,`A`.`Plz` AS `Plz`,`A`.`KV` AS `KV`,`A`.`UL` AS `UL`,`A`.`Lbc` AS `Lbc`,`A`.`HrKr` AS `HrKr`,`A`.`Par` AS `Par`,`A`.`Vys` AS `Vys`,`A`.`JMK` AS `JMK`,`A`.`Olm` AS `Olm`,`A`.`Zln` AS `Zln`,`A`.`MSK` AS `MSK` from (select ' ' AS `-`,`elections`.`Strany`.`Nazev` AS `Strana`,concat(if((`elections`.`Strany`.`Mandaty` < 10),' ',''),`elections`.`Strany`.`Mandaty`,' (',if((`elections`.`Strany`.`CRPodil` < 10),' ',''),`elections`.`Strany`.`CRPodil`,'%)') AS `Mandáty`,`elections`.`Strany`.`KrajPodil1` AS `Praha`,`elections`.`Strany`.`KrajPodil2` AS `StČ`,`elections`.`Strany`.`KrajPodil3` AS `JČ`,`elections`.`Strany`.`KrajPodil4` AS `Plz`,`elections`.`Strany`.`KrajPodil5` AS `KV`,`elections`.`Strany`.`KrajPodil6` AS `UL`,`elections`.`Strany`.`KrajPodil7` AS `Lbc`,`elections`.`Strany`.`KrajPodil8` AS `HrKr`,`elections`.`Strany`.`KrajPodil9` AS `Par`,`elections`.`Strany`.`KrajPodil10` AS `Vys`,`elections`.`Strany`.`KrajPodil11` AS `JMK`,`elections`.`Strany`.`KrajPodil12` AS `Olm`,`elections`.`Strany`.`KrajPodil13` AS `Zln`,`elections`.`Strany`.`KrajPodil14` AS `MSK` from `elections`.`Strany` where (`elections`.`Strany`.`CRPodil` > 1) order by `elections`.`Strany`.`Mandaty` desc,`elections`.`Strany`.`CRPodil` desc,`elections`.`Strany`.`Nazev`) `A` union select '' AS `-`,'Sečteno hlasů (100% = 2013)' AS `Strana`,concat(`CRP`.`CR`,' %') AS `Mandáty`,concat(`CRP`.`Kraj_1`,' %') AS `Praha`,concat(`CRP`.`Kraj_2`,' %') AS `StČ`,concat(`CRP`.`Kraj_3`,' %') AS `JČ`,concat(`CRP`.`Kraj_4`,' %') AS `Plz`,concat(`CRP`.`Kraj_5`,' %') AS `KV`,concat(`CRP`.`Kraj_6`,' %') AS `UL`,concat(`CRP`.`Kraj_7`,' %') AS `Lbc`,concat(`CRP`.`Kraj_8`,' %') AS `HrKr`,concat(`CRP`.`Kraj_9`,' %') AS `Par`,concat(`CRP`.`Kraj_10`,' %') AS `Vys`,concat(`CRP`.`Kraj_11`,' %') AS `JMK`,concat(`CRP`.`Kraj_12`,' %') AS `Olm`,concat(`CRP`.`Kraj_13`,' %') AS `Zln`,concat(`CRP`.`Kraj_14`,' %') AS `MSK` from `elections`.`CRPrehled` `CRP` where (`CRP`.`Popis` = 'Podil');
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_StranyPrehledPodily` AS SELECT `A`.`-` AS `-`,
+       `A`.`Strana` AS `Strana`,
+       `A`.`Mandáty` AS `Mandáty`,
+       `A`.`Praha` AS `Praha`,
+       `A`.`StČ` AS `StČ`,
+       `A`.`JČ` AS `JČ`,
+       `A`.`Plz` AS `Plz`,
+       `A`.`KV` AS `KV`,
+       `A`.`UL` AS `UL`,
+       `A`.`Lbc` AS `Lbc`,
+       `A`.`HrKr` AS `HrKr`,
+       `A`.`Par` AS `Par`,
+       `A`.`Vys` AS `Vys`,
+       `A`.`JMK` AS `JMK`,
+       `A`.`Olm` AS `Olm`,
+       `A`.`Zln` AS `Zln`,
+       `A`.`MSK` AS `MSK`
+FROM
+  (SELECT ' ' AS `-`,
+          S.`Nazev` AS `Strana`,
+          concat(if((S.`Mandaty` < 10),' ',''),S.`Mandaty`,' (',if((S.`CRPodil` < 10),' ',''),S.`CRPodil`,'%)') AS `Mandáty`,
+          S.`KrajPodil1` AS `Praha`,
+          S.`KrajPodil2` AS `StČ`,
+          S.`KrajPodil3` AS `JČ`,
+          S.`KrajPodil4` AS `Plz`,
+          S.`KrajPodil5` AS `KV`,
+          S.`KrajPodil6` AS `UL`,
+          S.`KrajPodil7` AS `Lbc`,
+          S.`KrajPodil8` AS `HrKr`,
+          S.`KrajPodil9` AS `Par`,
+          S.`KrajPodil10` AS `Vys`,
+          S.`KrajPodil11` AS `JMK`,
+          S.`KrajPodil12` AS `Olm`,
+          S.`KrajPodil13` AS `Zln`,
+          S.`KrajPodil14` AS `MSK`,
+          `S`.`Mandaty` AS MandatyPoradi,
+          `S`.`CRPodil` AS CRPodilPoradi
+   FROM `Strany` AS S
+   WHERE (S.`CRPodil` > 1)
+UNION 
+SELECT '' AS `-`,
+       'Sečteno hlasů (100% = 2013)' AS `Strana`,
+       concat(`CRP`.`CR`,' %') AS `Mandáty`,
+       concat(`CRP`.`Kraj_1`,' %') AS `Praha`,
+       concat(`CRP`.`Kraj_2`,' %') AS `StČ`,
+       concat(`CRP`.`Kraj_3`,' %') AS `JČ`,
+       concat(`CRP`.`Kraj_4`,' %') AS `Plz`,
+       concat(`CRP`.`Kraj_5`,' %') AS `KV`,
+       concat(`CRP`.`Kraj_6`,' %') AS `UL`,
+       concat(`CRP`.`Kraj_7`,' %') AS `Lbc`,
+       concat(`CRP`.`Kraj_8`,' %') AS `HrKr`,
+       concat(`CRP`.`Kraj_9`,' %') AS `Par`,
+       concat(`CRP`.`Kraj_10`,' %') AS `Vys`,
+       concat(`CRP`.`Kraj_11`,' %') AS `JMK`,
+       concat(`CRP`.`Kraj_12`,' %') AS `Olm`,
+       concat(`CRP`.`Kraj_13`,' %') AS `Zln`,
+       concat(`CRP`.`Kraj_14`,' %') AS `MSK`,
+      -1 AS MandatyPoradi,
+      -1 AS CRPodilPoradi 
+  FROM CRPrehled AS CRP WHERE CRP.Popis = 'Podil'  ) `A`
+ORDER BY
+  MandatyPoradi DESC,
+  CRPodilPoradi DESC;
 
 -- 2017-10-19 22:57:05
